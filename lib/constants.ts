@@ -10,10 +10,6 @@ export const N8N_TEST_WEBHOOK_DISPLAY =
   process.env.N8N_TEST_WEBHOOK_URL ??
   "https://n8n.kenankarabulut.com/webhook-test/vasy-verify";
 
-/** Browserless / n8n browser izleme ekranı (Coolify’daki debugger). */
-export const N8N_BROWSER_MONITOR_URL =
-  process.env.NEXT_PUBLIC_N8N_BROWSER_URL ?? "";
-
 export const N8N_TIMEOUT_MS = 90_000;
 
 /**

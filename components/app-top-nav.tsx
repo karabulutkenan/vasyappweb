@@ -1,7 +1,7 @@
 import Link from "next/link";
 
 type AppTopNavProps = {
-  active: "test" | "n8n";
+  active: "test" | "n8ntest";
 };
 
 export function AppTopNav({ active }: AppTopNavProps) {
@@ -28,9 +28,9 @@ export function AppTopNav({ active }: AppTopNavProps) {
             Test
           </Link>
           <Link
-            href="/n8n-monitor"
-            className={`${base} ${active === "n8n" ? selected : idle}`}
-            aria-current={active === "n8n" ? "page" : undefined}
+            href="/n8ntest"
+            className={`${base} ${active === "n8ntest" ? selected : idle}`}
+            aria-current={active === "n8ntest" ? "page" : undefined}
           >
             n8n test
           </Link>
