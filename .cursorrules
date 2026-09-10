@@ -1,0 +1,24 @@
+# VASY Web App - Cursor Kuralları ve Yetenekleri (Skills)
+
+## 1. Teknoloji Yığını ve Standartlar
+- Framework: Next.js 14+ (App Router).
+- Dil: Strict TypeScript (any kullanımı yasaktır).
+- Stil: Tailwind CSS (Utility-first, temiz class yapısı).
+- Backend/Auth: Supabase (@supabase/supabase-js).
+
+## 2. Mimari ve Güvenlik
+- Varsayılan olarak Server Components (RSC) kullan. State veya lifecycle (useState, useEffect vb.) gereken yerlerde dosyanın en üstüne 'use client' ekle.
+- N8N webhook'ları ve Supabase işlemleri gibi dış çağrılarda hata yönetimi (try/catch ve try/finally) zorunludur.
+- API anahtarlarını ASLA frontend koduna gömme, her zaman `process.env.NEXT_PUBLIC_...` kullan.
+- Kullanıcıdan alınan verileri (TCKN, Token) her zaman sanitize et. TCKN sadece 11 haneli rakam olmalıdır.
+
+## 3. UI/UX Standartları
+- Modern, minimalist, güven veren bir tasarım dili kullan (Tailwind ile).
+- Yükleme durumları (Loading state) için modern spinner'lar veya skeleton ekranlar kullan.
+- Hata durumlarında kullanıcıya her zaman ne olduğunu açıklayan, şık bildirimler (Toast/Snackbar) göster.
+- Drag & Drop (Sürükle-Bırak) dosya yükleme alanları görsel olarak belirgin ve erişilebilir (accessibility) olmalı.
+
+## 4. Dosya Yükleme (PDF) Kuralları
+- Sadece .pdf formatına izin ver.
+- Dosya boyutu kontrolü yap (Örn: Max 5MB).
+- n8n Webhook'una istek atarken dosyayı `FormData` içinde `multipart/form-data` olarak gönder.
