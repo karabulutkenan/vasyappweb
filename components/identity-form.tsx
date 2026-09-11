@@ -2,6 +2,7 @@
 
 import { FormEvent, useState } from "react";
 import { AppButton } from "@/components/ui/button";
+import { MaterialIcon } from "@/components/ui/material-icon";
 import { PillField } from "@/components/ui/pill-field";
 
 type IdentityFormProps = {
@@ -33,58 +34,54 @@ export function IdentityForm({ token, isSubmitting, onSubmit }: IdentityFormProp
   }
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-1 flex-col gap-4" noValidate>
+    <form onSubmit={handleSubmit} className="flex flex-col gap-4" noValidate>
       <input type="hidden" name="token" value={token} />
 
-      <div>
-        <label htmlFor="vasi-tckn" className="sr-only">
-          Vasi T.C. Kimlik Numarası
-        </label>
-        <PillField
-          id="vasi-tckn"
-          icon="badge"
-          surface="canvas"
-          name="vasiTckn"
-          inputMode="numeric"
-          autoComplete="off"
-          maxLength={11}
-          value={vasiTckn}
-          disabled={isSubmitting}
-          aria-invalid={localError?.includes("Vasi T.C.") ? true : undefined}
-          error={Boolean(localError?.includes("Vasi T.C."))}
-          placeholder="Vasi T.C. Kimlik No"
-          onChange={(event) => {
-            setVasiTckn(event.target.value.replace(/\D/g, "").slice(0, 11));
-            setLocalError(null);
-          }}
-        />
-      </div>
+      <PillField
+        id="vasi-tckn"
+        icon="badge"
+        surface="auth"
+        label="Vasi T.C. Kimlik No"
+        name="vasiTckn"
+        inputMode="numeric"
+        autoComplete="off"
+        maxLength={11}
+        value={vasiTckn}
+        disabled={isSubmitting}
+        aria-invalid={localError?.includes("Vasi T.C.") ? true : undefined}
+        error={Boolean(localError?.includes("Vasi T.C."))}
+        placeholder="11 haneli kimlik numarası"
+        onChange={(event) => {
+          setVasiTckn(event.target.value.replace(/\D/g, "").slice(0, 11));
+          setLocalError(null);
+        }}
+      />
 
-      <div>
-        <label htmlFor="verification-code" className="sr-only">
-          Doğrulama Kodu
-        </label>
-        <PillField
-          id="verification-code"
-          icon="vpn_key"
-          surface="canvas"
-          name="verificationCode"
-          autoComplete="one-time-code"
-          maxLength={16}
-          value={verificationCode}
-          disabled={isSubmitting}
-          error={Boolean(localError && !localError.includes("Vasi T.C."))}
-          placeholder="Doğrulama kodu"
-          onChange={(event) => {
-            setVerificationCode(event.target.value.replace(/[^A-Za-z0-9]/g, ""));
-            setLocalError(null);
-          }}
-        />
-      </div>
+      <PillField
+        id="verification-code"
+        icon="vpn_key"
+        surface="auth"
+        label="Doğrulama Kodu"
+        name="verificationCode"
+        autoComplete="one-time-code"
+        maxLength={16}
+        value={verificationCode}
+        disabled={isSubmitting}
+        error={Boolean(localError && !localError.includes("Vasi T.C."))}
+        placeholder="Size özel üretilen kod"
+        onChange={(event) => {
+          setVerificationCode(event.target.value.replace(/[^A-Za-z0-9]/g, ""));
+          setLocalError(null);
+        }}
+      />
 
       {localError ? (
-        <p className="px-2 text-[14px] font-bold leading-[1.35] text-error-text" role="alert">
-          {localError}
+        <p
+          className="flex items-start gap-2 rounded-card-sm bg-error/8 px-3.5 py-3 text-[14px] font-bold leading-[1.35] text-error-text"
+          role="alert"
+        >
+          <MaterialIcon name="error" filled size={18} className="mt-0.5 shrink-0" />
+          <span>{localError}</span>
         </p>
       ) : null}
 
@@ -92,7 +89,9 @@ export function IdentityForm({ token, isSubmitting, onSubmit }: IdentityFormProp
         <AppButton type="submit" loading={isSubmitting} disabled={isSubmitting}>
           {isSubmitting ? "DOĞRULANIYOR" : "DOĞRULA!"}
         </AppButton>
-        <p className="mt-4 text-center text-[12px] font-semibold leading-[1.4] text-outline">
+
+        <p className="mt-4 flex items-center justify-center gap-1.5 text-center text-[12px] font-semibold leading-[1.4] text-outline">
+          <MaterialIcon name="verified_user" size={16} className="text-primary" />
           Bilgileriniz yalnızca doğrulama amacıyla işlenir.
         </p>
       </div>

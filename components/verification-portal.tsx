@@ -147,6 +147,7 @@ export function VerificationPortal({ token }: VerificationPortalProps) {
       {!token ? (
         <AuthShell eyebrow="GEÇERSİZ BAĞLANTI">
           <EmptyState
+            align="start"
             icon="link_off"
             title="Bu sayfa açılamadı"
             description="Doğrulama yalnızca VASY uygulamasından iletilen bağlantı ile yapılabilir. Lütfen uygulamadaki bağlantıyı kullanın."

@@ -10,6 +10,7 @@ type EmptyStateProps = {
   actionIcon?: string;
   onAction?: () => void;
   children?: ReactNode;
+  align?: "center" | "start";
 };
 
 export function EmptyState({
@@ -20,18 +21,29 @@ export function EmptyState({
   actionIcon,
   onAction,
   children,
+  align = "center",
 }: EmptyStateProps) {
+  const isStart = align === "start";
+
   return (
-    <div className="flex flex-col items-center px-4 py-8 text-center">
-      <span className="mb-5 flex h-[86px] w-[86px] items-center justify-center rounded-full bg-primary-chip text-header">
-        <MaterialIcon name={icon} size={40} />
+    <div
+      className={`flex flex-col py-2 ${
+        isStart ? "items-start text-left" : "items-center px-2 text-center"
+      }`}
+    >
+      <span className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-primary-chip text-header">
+        <MaterialIcon name={icon} size={32} />
       </span>
-      <h2 className="text-[18px] font-extrabold text-header">{title}</h2>
-      <p className="mt-2 max-w-sm text-[14px] font-semibold leading-[1.4] text-outline">
+      <h2 className="text-[18px] font-extrabold leading-[1.3] text-header">{title}</h2>
+      <p
+        className={`mt-2 text-[14px] font-semibold leading-[1.4] text-outline ${
+          isStart ? "max-w-none" : "max-w-sm"
+        }`}
+      >
         {description}
       </p>
       {actionLabel && onAction ? (
-        <div className="mt-6 w-full max-w-xs">
+        <div className={`mt-6 w-full ${isStart ? "" : "max-w-xs"}`}>
           <AppButton icon={actionIcon} onClick={onAction}>
             {actionLabel}
           </AppButton>
