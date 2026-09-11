@@ -95,10 +95,10 @@ export function N8nTestForm() {
 
   return (
     <AuthShell eyebrow="BELGE DOĞRULAMA TESTİ">
-      <p className="mb-4 text-[15px] font-semibold leading-[1.4] text-auth-helper">
-        Vasiyet sahibi TCKN ve Formül C / ölüm belgesi PDF’ini göndererek n8n
-        webhook’unu test edin. Vasi doğrulaması bu ekranda yoktur.
-      </p>
+        <p className="mb-4 text-[15px] font-semibold leading-[1.4] text-auth-helper">
+          Geçici n8n testi: vasiyet sahibi TCKN + PDF gönderilir. Mobil doğrulama
+          akışından bağımsızdır.
+        </p>
 
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
