@@ -13,37 +13,37 @@ type AuthShellProps = {
 
 export function AuthShell({ eyebrow, description, children }: AuthShellProps) {
   return (
-    <div className="flex min-h-[calc(100dvh-3.25rem)] flex-1 bg-canvas lg:grid lg:grid-cols-2">
-      <section className="flex flex-1 flex-col justify-center px-5 py-8 sm:px-8 lg:bg-field lg:px-12 xl:px-16">
-        <div className="mx-auto w-full max-w-[440px]">
-          <header className="mb-7 flex items-center gap-3.5">
+    <div className="flex min-h-[calc(100dvh-3.25rem)] flex-1 bg-field lg:grid lg:grid-cols-2">
+      <section className="flex flex-1 flex-col justify-center px-6 py-10 sm:px-10 lg:px-14 xl:px-20">
+        <div className="mx-auto w-full max-w-[420px]">
+          <header className="mb-8 flex items-center gap-3.5">
             <BrandMark size={52} priority alt="" />
             <div className="min-w-0">
               <p className="text-[22px] font-extrabold tracking-[3.2px] text-header">
                 VASY
               </p>
-              <p className="mt-1 text-[12px] font-semibold leading-[1.35] text-outline">
+              <p className="mt-1 text-[13px] font-semibold leading-[1.35] text-header/75">
                 Dijital Mirasınızı Geleceğe Taşıyın
               </p>
             </div>
           </header>
 
-          <div className="rounded-card bg-field p-5 shadow-[0_0_0_1px_var(--secondary-container)] sm:p-6 lg:rounded-card-lg lg:bg-canvas lg:p-7 lg:shadow-none">
-            <p className="text-[11px] font-extrabold uppercase tracking-[3.4px] text-header/55">
+          <div>
+            <h1 className="text-[20px] font-extrabold tracking-[0.4px] text-header">
               {eyebrow}
-            </p>
+            </h1>
             <span
-              className="mt-2.5 block h-0.5 w-9 rounded-pill bg-primary"
+              className="mt-3 block h-[3px] w-10 rounded-pill bg-primary"
               aria-hidden="true"
             />
 
             {description ? (
-              <p className="mt-4 text-[15px] font-semibold leading-[1.4] text-outline">
+              <p className="mt-4 text-[15px] font-semibold leading-[1.45] text-header/80">
                 {description}
               </p>
             ) : null}
 
-            <div className="mt-5 flex flex-col gap-4">{children}</div>
+            <div className="mt-7 flex flex-col gap-5">{children}</div>
           </div>
         </div>
       </section>

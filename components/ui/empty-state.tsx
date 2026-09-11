@@ -27,7 +27,7 @@ export function EmptyState({
 
   return (
     <div
-      className={`flex flex-col py-2 ${
+      className={`flex flex-col ${
         isStart ? "items-start text-left" : "items-center px-2 text-center"
       }`}
     >
@@ -36,7 +36,7 @@ export function EmptyState({
       </span>
       <h2 className="text-[18px] font-extrabold leading-[1.3] text-header">{title}</h2>
       <p
-        className={`mt-2 text-[14px] font-semibold leading-[1.4] text-outline ${
+        className={`mt-2 text-[14px] font-semibold leading-[1.45] text-header/75 ${
           isStart ? "max-w-none" : "max-w-sm"
         }`}
       >

@@ -34,13 +34,12 @@ export function IdentityForm({ token, isSubmitting, onSubmit }: IdentityFormProp
   }
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-4" noValidate>
+    <form onSubmit={handleSubmit} className="flex flex-col gap-5" noValidate>
       <input type="hidden" name="token" value={token} />
 
       <PillField
         id="vasi-tckn"
         icon="badge"
-        surface="auth"
         label="Vasi T.C. Kimlik No"
         name="vasiTckn"
         inputMode="numeric"
@@ -60,7 +59,6 @@ export function IdentityForm({ token, isSubmitting, onSubmit }: IdentityFormProp
       <PillField
         id="verification-code"
         icon="vpn_key"
-        surface="auth"
         label="Doğrulama Kodu"
         name="verificationCode"
         autoComplete="one-time-code"
@@ -77,7 +75,7 @@ export function IdentityForm({ token, isSubmitting, onSubmit }: IdentityFormProp
 
       {localError ? (
         <p
-          className="flex items-start gap-2 rounded-card-sm bg-error/8 px-3.5 py-3 text-[14px] font-bold leading-[1.35] text-error-text"
+          className="flex items-start gap-2 rounded-card-sm bg-[#FDECEC] px-3.5 py-3 text-[14px] font-bold leading-[1.35] text-error-text"
           role="alert"
         >
           <MaterialIcon name="error" filled size={18} className="mt-0.5 shrink-0" />
@@ -90,8 +88,8 @@ export function IdentityForm({ token, isSubmitting, onSubmit }: IdentityFormProp
           {isSubmitting ? "DOĞRULANIYOR" : "DOĞRULA!"}
         </AppButton>
 
-        <p className="mt-4 flex items-center justify-center gap-1.5 text-center text-[12px] font-semibold leading-[1.4] text-outline">
-          <MaterialIcon name="verified_user" size={16} className="text-primary" />
+        <p className="mt-4 flex items-center justify-center gap-1.5 text-center text-[12px] font-semibold leading-[1.4] text-header/70">
+          <MaterialIcon name="verified_user" size={16} className="text-header" />
           Bilgileriniz yalnızca doğrulama amacıyla işlenir.
         </p>
       </div>

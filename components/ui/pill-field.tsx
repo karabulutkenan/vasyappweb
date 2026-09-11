@@ -5,7 +5,6 @@ type PillFieldProps = {
   icon: string;
   error?: boolean;
   trailing?: ReactNode;
-  surface?: "field" | "canvas" | "auth";
   label?: string;
 } & Omit<InputHTMLAttributes<HTMLInputElement>, "className">;
 
@@ -13,45 +12,35 @@ export function PillField({
   icon,
   error = false,
   trailing,
-  surface = "field",
   label,
   id,
   ...props
 }: PillFieldProps) {
-  const fillClass =
-    surface === "canvas"
-      ? "bg-canvas"
-      : surface === "auth"
-        ? "bg-canvas lg:bg-field"
-        : "bg-field";
-
   return (
     <div className="flex flex-col gap-2">
       {label ? (
         <label
           htmlFor={id}
-          className="px-1 text-[11px] font-extrabold uppercase tracking-[0.8px] text-outline"
+          className="text-[13px] font-bold leading-none text-header"
         >
           {label}
         </label>
       ) : null}
       <div
-        className={`flex min-h-14 w-full items-center rounded-pill px-4 py-3.5 transition-colors ${fillClass} ${
+        className={`flex min-h-[56px] w-full items-center rounded-pill bg-canvas px-4 transition-colors ${
           error
             ? "ring-2 ring-error"
-            : "ring-1 ring-secondary-container focus-within:ring-2 focus-within:ring-primary"
+            : "ring-1 ring-[#B7C2CC] focus-within:ring-2 focus-within:ring-header"
         }`}
       >
-        <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-[14px] bg-primary-well text-primary">
-          <MaterialIcon name={icon} size={22} />
-        </span>
+        <MaterialIcon name={icon} size={24} className="shrink-0 text-header" />
         <span
-          className="mx-3 h-7 w-px shrink-0 bg-divider"
+          className="mx-3 h-6 w-px shrink-0 bg-header/25"
           aria-hidden="true"
         />
         <input
           id={id}
-          className="min-w-0 flex-1 bg-transparent text-[15px] font-semibold leading-[1.35] text-header outline-none placeholder:font-semibold placeholder:text-outline/80 disabled:opacity-60"
+          className="min-w-0 flex-1 bg-transparent text-[15px] font-semibold leading-[1.35] text-header outline-none placeholder:text-header/45 disabled:opacity-60"
           {...props}
         />
         {trailing ? <span className="ml-2 shrink-0">{trailing}</span> : null}
