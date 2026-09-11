@@ -43,6 +43,7 @@ export function IdentityForm({ token, isSubmitting, onSubmit }: IdentityFormProp
         <PillField
           id="vasi-tckn"
           icon="badge"
+          surface="canvas"
           name="vasiTckn"
           inputMode="numeric"
           autoComplete="off"
@@ -66,6 +67,7 @@ export function IdentityForm({ token, isSubmitting, onSubmit }: IdentityFormProp
         <PillField
           id="verification-code"
           icon="vpn_key"
+          surface="canvas"
           name="verificationCode"
           autoComplete="one-time-code"
           maxLength={16}
@@ -86,11 +88,11 @@ export function IdentityForm({ token, isSubmitting, onSubmit }: IdentityFormProp
         </p>
       ) : null}
 
-      <div className="mt-auto pt-2">
+      <div className="pt-1">
         <AppButton type="submit" loading={isSubmitting} disabled={isSubmitting}>
           {isSubmitting ? "DOĞRULANIYOR" : "DOĞRULA!"}
         </AppButton>
-        <p className="mt-4 text-center text-[12px] font-semibold leading-[1.4] text-auth-helper">
+        <p className="mt-4 text-center text-[12px] font-semibold leading-[1.4] text-outline">
           Bilgileriniz yalnızca doğrulama amacıyla işlenir.
         </p>
       </div>

@@ -146,21 +146,19 @@ export function VerificationPortal({ token }: VerificationPortalProps) {
 
       {!token ? (
         <AuthShell eyebrow="GEÇERSİZ BAĞLANTI">
-          <div className="flex flex-1 flex-col justify-center rounded-card-lg bg-field px-4 py-6">
-            <EmptyState
-              icon="link_off"
-              title="Bu sayfa açılamadı"
-              description="Doğrulama yalnızca VASY uygulamasından iletilen bağlantı ile yapılabilir. Lütfen uygulamadaki bağlantıyı kullanın."
-            />
-          </div>
+          <EmptyState
+            icon="link_off"
+            title="Bu sayfa açılamadı"
+            description="Doğrulama yalnızca VASY uygulamasından iletilen bağlantı ile yapılabilir. Lütfen uygulamadaki bağlantıyı kullanın."
+          />
         </AuthShell>
       ) : null}
 
       {token && step === "identity" ? (
-        <AuthShell eyebrow="HOŞ GELDİNİZ">
-          <p className="mb-5 text-[15px] font-semibold leading-[1.4] text-auth-helper">
-            Vasi T.C. kimlik numaranız ve size özel doğrulama kodu ile devam edin.
-          </p>
+        <AuthShell
+          eyebrow="HOŞ GELDİNİZ"
+          description="Vasi T.C. kimlik numaranız ve size özel doğrulama kodu ile devam edin."
+        >
           <IdentityForm
             token={token}
             isSubmitting={isVerifyingIdentity}

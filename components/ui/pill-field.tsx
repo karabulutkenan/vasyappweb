@@ -5,18 +5,22 @@ type PillFieldProps = {
   icon: string;
   error?: boolean;
   trailing?: ReactNode;
+  surface?: "field" | "canvas";
 } & Omit<InputHTMLAttributes<HTMLInputElement>, "className">;
 
 export function PillField({
   icon,
   error = false,
   trailing,
+  surface = "field",
   id,
   ...props
 }: PillFieldProps) {
+  const fillClass = surface === "canvas" ? "bg-canvas" : "bg-field";
+
   return (
     <div
-      className={`flex min-h-14 w-full items-center rounded-pill bg-field px-5 py-[18px] ${
+      className={`flex min-h-14 w-full items-center rounded-pill px-5 py-[18px] ${fillClass} ${
         error ? "ring-2 ring-error" : ""
       }`}
     >

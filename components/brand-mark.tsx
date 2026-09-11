@@ -4,12 +4,14 @@ type BrandMarkProps = {
   size?: number;
   priority?: boolean;
   alt?: string;
+  className?: string;
 };
 
 export function BrandMark({
   size = 135,
   priority = false,
   alt = "VASY",
+  className,
 }: BrandMarkProps) {
   return (
     <Image
@@ -18,7 +20,7 @@ export function BrandMark({
       width={size}
       height={size}
       priority={priority}
-      className="h-auto w-auto rounded-full"
+      className={`h-auto w-auto shrink-0 rounded-full${className ? ` ${className}` : ""}`}
     />
   );
 }
