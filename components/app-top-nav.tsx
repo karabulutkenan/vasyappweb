@@ -12,12 +12,12 @@ export function AppTopNav({ active }: AppTopNavProps) {
   return (
     <nav
       aria-label="Geçici test erişimi"
-      className="sticky top-0 z-40 border-b border-stone-200/80 bg-canvas/95 backdrop-blur"
+      className="sticky top-0 z-40 border-b border-secondary-container bg-field"
     >
-      <div className="mx-auto flex max-w-[460px] items-center justify-between gap-3 px-4 py-3">
+      <div className="mx-auto flex w-full max-w-[1120px] items-center justify-between gap-3 px-5 py-3 lg:px-8">
         <Link
           href="/"
-          className="text-[12px] font-extrabold tracking-[0.18em] text-header"
+          className="text-[13px] font-extrabold tracking-[2px] text-header"
         >
           VASY
         </Link>
@@ -25,14 +25,14 @@ export function AppTopNav({ active }: AppTopNavProps) {
         {active === "verify" ? (
           <Link
             href="/n8ntest"
-            className="rounded-full bg-primary px-3 py-1.5 text-[13px] font-bold tracking-wide text-white transition hover:opacity-90"
+            className="rounded-pill bg-primary px-3.5 py-1.5 text-[13px] font-bold tracking-wide text-on-primary transition hover:bg-primary-container"
           >
             n8n test
           </Link>
         ) : (
           <Link
             href="/"
-            className="rounded-full border border-stone-300 bg-white px-3 py-1.5 text-[13px] font-bold tracking-wide text-header transition hover:bg-stone-50"
+            className="rounded-pill bg-header px-3.5 py-1.5 text-[13px] font-bold tracking-wide text-white transition hover:bg-header-hover"
           >
             Ana sayfa
           </Link>

@@ -3,6 +3,9 @@
 import { FormEvent, useRef, useState } from "react";
 import { AuthShell } from "@/components/ui/auth-shell";
 import { AppButton } from "@/components/ui/button";
+import { IconWell } from "@/components/ui/icon-well";
+import { MaterialIcon } from "@/components/ui/material-icon";
+import { PillField } from "@/components/ui/pill-field";
 import {
   MAX_PDF_SIZE_BYTES,
   MAX_PDF_SIZE_LABEL,
@@ -94,82 +97,90 @@ export function N8nTestForm() {
   }
 
   return (
-    <AuthShell eyebrow="BELGE DOĞRULAMA TESTİ">
-        <p className="mb-4 text-[15px] font-semibold leading-[1.4] text-auth-helper">
-          Geçici n8n testi: vasiyet sahibi TCKN + PDF gönderilir. Mobil doğrulama
-          akışından bağımsızdır.
-        </p>
+    <AuthShell
+      eyebrow="BELGE DOĞRULAMA TESTİ"
+      description="Geçici n8n testi: vasiyet sahibi TCKN + PDF gönderilir. Mobil doğrulama akışından bağımsızdır."
+    >
+      <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+        <PillField
+          id="n8n-tckn"
+          icon="badge"
+          label="Vasiyet sahibi T.C. Kimlik No"
+          inputMode="numeric"
+          maxLength={11}
+          value={tckn}
+          disabled={isSubmitting}
+          placeholder="11 haneli TCKN"
+          onChange={(event) => {
+            setTckn(event.target.value.replace(/\D/g, "").slice(0, 11));
+            setResult(null);
+          }}
+        />
 
-      <form onSubmit={handleSubmit} className="space-y-4">
         <div>
-          <label
-            htmlFor="n8n-tckn"
-            className="mb-1.5 block text-sm font-semibold text-white"
-          >
-            Vasiyet sahibi T.C. Kimlik No
-          </label>
-          <input
-            id="n8n-tckn"
-            inputMode="numeric"
-            maxLength={11}
-            value={tckn}
-            disabled={isSubmitting}
-            onChange={(event) => {
-              setTckn(event.target.value.replace(/\D/g, "").slice(0, 11));
-              setResult(null);
+          <p className="mb-2 px-0.5 text-[13px] font-bold text-header">Belge</p>
+          <div
+            onDragEnter={(event) => {
+              event.preventDefault();
+              setIsDragging(true);
             }}
-            placeholder="11 haneli TCKN"
-            className="h-12 w-full rounded-2xl border-0 bg-white px-4 text-[15px] tracking-[0.14em] text-header outline-none"
-          />
-        </div>
-
-        <div
-          onDragEnter={(event) => {
-            event.preventDefault();
-            setIsDragging(true);
-          }}
-          onDragOver={(event) => {
-            event.preventDefault();
-            setIsDragging(true);
-          }}
-          onDragLeave={(event) => {
-            event.preventDefault();
-            setIsDragging(false);
-          }}
-          onDrop={(event) => {
-            event.preventDefault();
-            setIsDragging(false);
-            acceptFile(event.dataTransfer.files[0]);
-          }}
-          className={`rounded-3xl border-2 border-dashed px-4 py-8 text-center transition ${
-            isDragging
-              ? "border-white bg-white/20"
-              : "border-white/50 bg-white/10"
-          }`}
-        >
-          <input
-            ref={inputRef}
-            id="n8n-pdf"
-            type="file"
-            accept="application/pdf,.pdf"
-            className="sr-only"
-            disabled={isSubmitting}
-            onChange={(event) => acceptFile(event.target.files?.[0])}
-          />
-          <label htmlFor="n8n-pdf" className="block cursor-pointer text-white">
-            <span className="block font-semibold">PDF yükle / sürükle-bırak</span>
-            <span className="mt-1 block text-sm text-white/80">
-              Max {MAX_PDF_SIZE_LABEL}
-            </span>
-          </label>
+            onDragOver={(event) => {
+              event.preventDefault();
+              setIsDragging(true);
+            }}
+            onDragLeave={(event) => {
+              event.preventDefault();
+              setIsDragging(false);
+            }}
+            onDrop={(event) => {
+              event.preventDefault();
+              setIsDragging(false);
+              acceptFile(event.dataTransfer.files[0]);
+            }}
+            className={`rounded-card-md bg-field px-5 py-8 text-center ring-1 transition-colors ${
+              isDragging
+                ? "bg-primary-container ring-primary"
+                : "ring-secondary-container"
+            }`}
+          >
+            <input
+              ref={inputRef}
+              id="n8n-pdf"
+              type="file"
+              accept="application/pdf,.pdf"
+              className="sr-only"
+              disabled={isSubmitting}
+              onChange={(event) => acceptFile(event.target.files?.[0])}
+            />
+            <label htmlFor="n8n-pdf" className="block cursor-pointer">
+              <span className="mx-auto mb-3 flex justify-center">
+                <IconWell>
+                  <MaterialIcon name="picture_as_pdf" size={22} />
+                </IconWell>
+              </span>
+              <span className="block text-[15px] font-extrabold text-header">
+                PDF yükle / sürükle-bırak
+              </span>
+              <span className="mt-1 block text-[12px] font-semibold text-outline">
+                En fazla {MAX_PDF_SIZE_LABEL}, yalnızca PDF
+              </span>
+            </label>
+          </div>
         </div>
 
         {file ? (
-          <div className="rounded-2xl bg-white/95 px-4 py-3 text-sm text-header">
-            <p className="truncate font-medium">{file.name}</p>
+          <div className="flex items-center gap-3 rounded-card-sm bg-approved px-3.5 py-3">
+            <IconWell className="bg-heart/15 text-heart">
+              <MaterialIcon name="check_circle" filled size={22} />
+            </IconWell>
+            <div className="min-w-0 flex-1">
+              <p className="truncate text-[15px] font-extrabold text-header">
+                {file.name}
+              </p>
+            </div>
             <button
               type="button"
-              className="mt-1 text-sm font-semibold text-logout"
+              className="shrink-0 rounded-pill px-3 py-1.5 text-[12px] font-bold text-logout hover:bg-logout/8"
               onClick={() => {
                 setFile(null);
                 if (inputRef.current) {
@@ -185,10 +196,10 @@ export function N8nTestForm() {
         {result ? (
           <p
             role="alert"
-            className={`rounded-2xl px-3 py-2 text-sm ${
+            className={`rounded-card-sm px-3.5 py-3 text-[14px] font-bold ${
               result.tone === "success"
-                ? "bg-emerald-50 text-emerald-900"
-                : "bg-rose-50 text-rose-900"
+                ? "bg-approved text-header"
+                : "bg-[#FDECEC] text-error-text"
             }`}
           >
             {result.message}
@@ -197,17 +208,16 @@ export function N8nTestForm() {
 
         <AppButton
           type="submit"
-          variant="primary"
           loading={isSubmitting}
           disabled={!file || tckn.length !== 11}
         >
-          n8n’e gönder
+          {isSubmitting ? "GÖNDERİLİYOR" : "N8N’E GÖNDER!"}
         </AppButton>
-      </form>
 
-      <p className="mt-4 break-all text-center text-[11px] leading-5 text-white/70">
-        Hedef: {N8N_TEST_WEBHOOK_DISPLAY}
-      </p>
+        <p className="break-all text-center text-[11px] font-semibold leading-5 text-outline">
+          Hedef: {N8N_TEST_WEBHOOK_DISPLAY}
+        </p>
+      </form>
     </AuthShell>
   );
 }

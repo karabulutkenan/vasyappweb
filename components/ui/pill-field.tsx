@@ -8,6 +8,11 @@ type PillFieldProps = {
   label?: string;
 } & Omit<InputHTMLAttributes<HTMLInputElement>, "className">;
 
+/**
+ * Hap (stadium) input — design system:
+ * beyaz fill, lacivert ikon/metin, outline hint.
+ * Açık zeminde asla beyaz yazı kullanılmaz.
+ */
 export function PillField({
   icon,
   error = false,
@@ -21,26 +26,26 @@ export function PillField({
       {label ? (
         <label
           htmlFor={id}
-          className="text-[13px] font-bold leading-none text-header"
+          className="px-0.5 text-[13px] font-bold text-header"
         >
           {label}
         </label>
       ) : null}
       <div
-        className={`flex min-h-[56px] w-full items-center rounded-pill bg-canvas px-4 transition-colors ${
-          error
-            ? "ring-2 ring-error"
-            : "ring-1 ring-[#B7C2CC] focus-within:ring-2 focus-within:ring-header"
+        className={`flex min-h-14 w-full items-center rounded-pill px-5 py-[18px] ${
+          error ? "ring-2 ring-error" : "ring-1 ring-secondary-container"
         }`}
+        style={{ backgroundColor: "var(--canvas)" }}
       >
-        <MaterialIcon name={icon} size={24} className="shrink-0 text-header" />
+        <MaterialIcon name={icon} size={26} className="shrink-0 text-header" />
         <span
-          className="mx-3 h-6 w-px shrink-0 bg-header/25"
+          className="mx-3 h-7 w-px shrink-0 bg-divider"
           aria-hidden="true"
         />
         <input
           id={id}
-          className="min-w-0 flex-1 bg-transparent text-[15px] font-semibold leading-[1.35] text-header outline-none placeholder:text-header/45 disabled:opacity-60"
+          className="pill-input min-w-0 flex-1 bg-transparent text-[15px] font-semibold leading-[1.35] outline-none disabled:opacity-60"
+          style={{ color: "var(--header)" }}
           {...props}
         />
         {trailing ? <span className="ml-2 shrink-0">{trailing}</span> : null}

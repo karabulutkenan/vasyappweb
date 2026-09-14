@@ -34,7 +34,7 @@ export function IdentityForm({ token, isSubmitting, onSubmit }: IdentityFormProp
   }
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-5" noValidate>
+    <form onSubmit={handleSubmit} className="flex flex-col gap-4" noValidate>
       <input type="hidden" name="token" value={token} />
 
       <PillField
@@ -83,12 +83,12 @@ export function IdentityForm({ token, isSubmitting, onSubmit }: IdentityFormProp
         </p>
       ) : null}
 
-      <div className="pt-1">
+      <div className="pt-2">
         <AppButton type="submit" loading={isSubmitting} disabled={isSubmitting}>
           {isSubmitting ? "DOĞRULANIYOR" : "DOĞRULA!"}
         </AppButton>
 
-        <p className="mt-4 flex items-center justify-center gap-1.5 text-center text-[12px] font-semibold leading-[1.4] text-header/70">
+        <p className="mt-4 flex items-center justify-center gap-1.5 text-center text-[12px] font-semibold leading-[1.4] text-header/75">
           <MaterialIcon name="verified_user" size={16} className="text-header" />
           Bilgileriniz yalnızca doğrulama amacıyla işlenir.
         </p>
