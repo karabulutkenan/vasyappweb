@@ -1,18 +1,21 @@
+import type { TestamentContentBlock } from "@/lib/testament-content";
+
 export type VerificationPayload = {
   token: string;
   vasiTckn: string;
   verificationCode: string;
 };
 
+/**
+ * Guardian-facing testament summary after successful verification.
+ * Technical fields (token, TCKN, is_verified) must not be rendered in UI.
+ */
 export type HeritageItem = {
   id: string;
-  token: string;
   title: string;
-  type: string | null;
-  description: string | null;
-  amount: number | string | null;
-  institution: string | null;
-  status: string | null;
+  blocks: TestamentContentBlock[];
+  /** Optional preview excerpt for list cards */
+  previewText: string | null;
 };
 
 export type ActionResult<T> =

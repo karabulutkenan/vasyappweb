@@ -1,5 +1,9 @@
 import { SUPABASE_TABLES, TESTAMENT_COLUMNS } from "@/lib/constants";
 import { getSupabaseAdmin } from "@/lib/supabase";
+import {
+  extractPreviewText,
+  parseTestamentContent,
+} from "@/lib/testament-content";
 import type { HeritageItem } from "@/lib/types";
 
 type TestamentRow = {
@@ -10,24 +14,10 @@ type TestamentRow = {
   is_verified: boolean | null;
 };
 
-function extractWillText(content: string | null): string | null {
-  if (!content) {
-    return null;
-  }
-
-  try {
-    const parsed = JSON.parse(content) as { text?: unknown };
-    if (typeof parsed.text === "string" && parsed.text.trim()) {
-      return parsed.text.trim();
-    }
-  } catch {
-    // düz metin olabilir
-  }
-
-  const trimmed = content.trim();
-  return trimmed || null;
-}
-
+/**
+ * Returns verified, active testaments for the guardian+token pair only.
+ * Security filters must stay intact.
+ */
 export async function fetchHeritageByToken(
   token: string,
   guardianTckn: string,
@@ -48,14 +38,13 @@ export async function fetchHeritageByToken(
     throw new Error("Miras kayıtları alınamadı.");
   }
 
-  return (data ?? []).map((row) => ({
-    id: row.id,
-    token: row.verification_token ?? token,
-    title: row.title?.trim() || "Vasiyet kaydı",
-    type: "Vasiyet",
-    description: extractWillText(row.content),
-    amount: null,
-    institution: null,
-    status: row.is_verified ? "Doğrulandı" : "Beklemede",
-  }));
+  return (data ?? []).map((row) => {
+    const blocks = parseTestamentContent(row.content);
+    return {
+      id: row.id,
+      title: row.title?.trim() || "Vasiyet",
+      blocks,
+      previewText: extractPreviewText(blocks),
+    };
+  });
 }

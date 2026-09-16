@@ -3,8 +3,8 @@
 import { useCallback, useState } from "react";
 import { verifyIdentity } from "@/app/actions/verify-identity";
 import { DocumentUpload } from "@/components/document-upload";
-import { HeritageResults } from "@/components/heritage-results";
 import { IdentityForm } from "@/components/identity-form";
+import { TestamentViewer } from "@/components/testament/testament-viewer";
 import { ToastBanner, type ToastState } from "@/components/toast-banner";
 import { AuthShell } from "@/components/ui/auth-shell";
 import { EmptyState } from "@/components/ui/empty-state";
@@ -14,6 +14,7 @@ import { PageSheet } from "@/components/ui/page-sheet";
 import { ProofOfLifeCard } from "@/components/ui/proof-of-life-card";
 import { VerifyingOverlay } from "@/components/verifying-overlay";
 import type { DocumentSubmitResult, HeritageItem } from "@/lib/types";
+import { toUserFacingMessage } from "@/lib/user-facing-errors";
 import { maskTckn } from "@/lib/validation";
 
 type Step = "identity" | "upload" | "results";
@@ -28,12 +29,11 @@ type VerificationPortalProps = {
   token: string | null;
 };
 
-function StepChips({ current }: { current: Step }) {
+function StepChips({ current }: { current: Exclude<Step, "results"> }) {
   return (
     <div className="mb-4 flex flex-wrap gap-2">
       <FilterChip selected={current === "identity"}>Vasi</FilterChip>
       <FilterChip selected={current === "upload"}>Belge</FilterChip>
-      <FilterChip selected={current === "results"}>Kayıtlar</FilterChip>
     </div>
   );
 }
@@ -66,7 +66,10 @@ export function VerificationPortal({ token }: VerificationPortalProps) {
       });
 
       if (!result.ok) {
-        setToast({ tone: "error", message: result.message });
+        setToast({
+          tone: "error",
+          message: toUserFacingMessage(result.message),
+        });
         return;
       }
 
@@ -115,7 +118,9 @@ export function VerificationPortal({ token }: VerificationPortalProps) {
       if (!payload.ok) {
         setToast({
           tone: "error",
-          message: payload.message || "Belge doğrulanamadı",
+          message: toUserFacingMessage(
+            payload.message || "Belge doğrulanamadı",
+          ),
         });
         setStep("upload");
         return;
@@ -125,7 +130,7 @@ export function VerificationPortal({ token }: VerificationPortalProps) {
       setStep("results");
       setToast({
         tone: "success",
-        message: "Belge doğrulandı. Miras kayıtları listelendi.",
+        message: "İçerikler görüntülemeye hazır.",
       });
     } catch {
       setToast({ tone: "error", message: "Belge doğrulanamadı" });
@@ -184,24 +189,19 @@ export function VerificationPortal({ token }: VerificationPortalProps) {
           <DocumentUpload
             isSubmitting={isSubmittingDocument}
             onSubmit={handleDocumentSubmit}
-            onError={(message) => setToast({ tone: "error", message })}
+            onError={(message) =>
+              setToast({ tone: "error", message: toUserFacingMessage(message) })
+            }
           />
         </PageSheet>
       ) : null}
 
       {token && step === "results" ? (
-        <PageSheet title="Doğrulama tamamlandı">
-          <StepChips current="results" />
-          <ProofOfLifeCard
-            tone="healthy"
-            title="Her şey yolunda"
-            trailing={<MaterialIcon name="favorite" filled size={22} className="text-heart" />}
-          />
-          <p className="mb-4 mt-4 text-[14px] font-semibold leading-[1.4] text-outline">
-            Aşağıdaki kayıtlar yalnızca görüntüleme amaçlıdır ve değiştirilemez.
-          </p>
-          <HeritageResults items={items} />
-        </PageSheet>
+        <div className="min-h-dvh bg-canvas">
+          <div className="mx-auto w-full max-w-[1120px] px-5 pb-12 pt-8 sm:px-8">
+            <TestamentViewer items={items} />
+          </div>
+        </div>
       ) : null}
     </>
   );
