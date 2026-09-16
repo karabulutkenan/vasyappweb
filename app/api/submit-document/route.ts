@@ -17,7 +17,10 @@ import {
   sanitizeToken,
   sanitizeVerificationCode,
 } from "@/lib/validation";
-import { findMatchingVerification } from "@/lib/verify-record";
+import {
+  fetchOwnerTcKimlikNo,
+  findMatchingVerification,
+} from "@/lib/verify-record";
 
 export const maxDuration = 120;
 
@@ -33,9 +36,6 @@ export async function POST(request: Request): Promise<Response> {
     const verificationCode = sanitizeVerificationCode(
       String(formData.get("verificationCode") ?? ""),
     );
-    const vasiyetSahibiTckn = sanitizeDigits(
-      String(formData.get("vasiyetSahibiTckn") ?? ""),
-    );
     const fileValue = formData.get("file");
 
     if (
@@ -45,26 +45,6 @@ export async function POST(request: Request): Promise<Response> {
     ) {
       return jsonResult(
         { ok: false, message: "Vasi doğrulaması geçersiz." },
-        400,
-      );
-    }
-
-    if (!isValidTckn(vasiyetSahibiTckn)) {
-      return jsonResult(
-        {
-          ok: false,
-          message: "Vasiyet sahibi T.C. Kimlik Numarası 11 haneli ve geçerli olmalıdır.",
-        },
-        400,
-      );
-    }
-
-    if (vasiyetSahibiTckn === vasiTckn) {
-      return jsonResult(
-        {
-          ok: false,
-          message: "Vasiyet sahibi kimliği vasi kimliğinden farklı olmalıdır.",
-        },
         400,
       );
     }
@@ -103,8 +83,28 @@ export async function POST(request: Request): Promise<Response> {
       );
     }
 
+    if (!matched.owner_id) {
+      return jsonResult(
+        { ok: false, message: "DOCUMENT_OWNER_MISMATCH" },
+        422,
+      );
+    }
+
+    const ownerTcKimlikNo = await fetchOwnerTcKimlikNo(matched.owner_id);
+
+    if (
+      !ownerTcKimlikNo ||
+      !isValidTckn(ownerTcKimlikNo) ||
+      ownerTcKimlikNo === vasiTckn
+    ) {
+      return jsonResult(
+        { ok: false, message: "DOCUMENT_OWNER_MISMATCH" },
+        422,
+      );
+    }
+
     const outbound = new FormData();
-    outbound.append("tckn", vasiyetSahibiTckn);
+    outbound.append("tckn", ownerTcKimlikNo);
     outbound.append("file", fileValue, fileValue.name);
 
     const controller = new AbortController();
@@ -139,7 +139,7 @@ export async function POST(request: Request): Promise<Response> {
 
       const documentOwnerMatches =
         String(n8nResult.tckn ?? "").trim() ===
-        String(vasiyetSahibiTckn).trim();
+        String(ownerTcKimlikNo).trim();
 
       const isDocumentValid =
         n8nResult.is_valid === true &&

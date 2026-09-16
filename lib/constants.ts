@@ -28,3 +28,8 @@ export const TESTAMENT_COLUMNS = {
   isVerified: "is_verified",
   ownerId: "owner_id",
 } as const;
+
+export const PROFILE_COLUMNS = {
+  id: "id",
+  tcKimlikNo: "tc_kimlik_no",
+} as const;

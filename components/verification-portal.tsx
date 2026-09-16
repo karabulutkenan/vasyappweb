@@ -90,10 +90,7 @@ export function VerificationPortal({ token }: VerificationPortalProps) {
     }
   }
 
-  async function handleDocumentSubmit(values: {
-    file: File;
-    vasiyetSahibiTckn: string;
-  }) {
+  async function handleDocumentSubmit(values: { file: File }) {
     if (!session) {
       setToast({ tone: "error", message: "Önce vasi doğrulaması yapın." });
       setStep("identity");
@@ -104,7 +101,6 @@ export function VerificationPortal({ token }: VerificationPortalProps) {
     formData.append("token", session.token);
     formData.append("vasiTckn", session.vasiTckn);
     formData.append("verificationCode", session.verificationCode);
-    formData.append("vasiyetSahibiTckn", values.vasiyetSahibiTckn);
     formData.append("file", values.file, values.file.name);
 
     setIsSubmittingDocument(true);
@@ -182,10 +178,10 @@ export function VerificationPortal({ token }: VerificationPortalProps) {
             }
           />
           <p className="mb-4 mt-4 text-[14px] font-semibold leading-[1.4] text-outline">
-            Vasiyet sahibinin T.C. kimlik numarasını girin ve Formül C / ölüm belgesini PDF olarak yükleyin.
+            Formül C / ölüm belgesini PDF olarak yükleyin. Vasiyet sahibi kimliği
+            sistem tarafından bağlantıdan doğrulanır.
           </p>
           <DocumentUpload
-            vasiTckn={session?.vasiTckn ?? ""}
             isSubmitting={isSubmittingDocument}
             onSubmit={handleDocumentSubmit}
             onError={(message) => setToast({ tone: "error", message })}
