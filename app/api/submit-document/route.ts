@@ -3,7 +3,10 @@ import {
   MAX_PDF_SIZE_BYTES,
   N8N_TIMEOUT_MS,
   N8N_WEBHOOK_URL,
+  SUPABASE_TABLES,
+  TESTAMENT_COLUMNS,
 } from "@/lib/constants";
+import { getSupabaseAdmin } from "@/lib/supabase";
 import type { DocumentSubmitResult } from "@/lib/types";
 import {
   isPdfFile,
@@ -163,6 +166,23 @@ export async function POST(request: Request): Promise<Response> {
       );
     } finally {
       clearTimeout(timeoutId);
+    }
+
+    const supabase = getSupabaseAdmin();
+    const { data: updatedRows, error: updateError } = await supabase
+      .from(SUPABASE_TABLES.testaments)
+      .update({ [TESTAMENT_COLUMNS.isVerified]: true })
+      .eq(TESTAMENT_COLUMNS.token, token)
+      .eq(TESTAMENT_COLUMNS.guardianTckn, vasiTckn)
+      .eq("is_active", true)
+      .select(TESTAMENT_COLUMNS.id);
+
+    if (updateError || !updatedRows || updatedRows.length === 0) {
+      console.error("[submit-document] verification update failed", updateError);
+      return jsonResult(
+        { ok: false, message: "VERIFICATION_UPDATE_FAILED" },
+        500,
+      );
     }
 
     const items = await fetchHeritageByToken(token);
