@@ -8,7 +8,6 @@ type TestamentRow = {
   title: string | null;
   content: string | null;
   is_verified: boolean | null;
-  guardian_tckn: string | null;
 };
 
 function extractWillText(content: string | null): string | null {
@@ -31,13 +30,17 @@ function extractWillText(content: string | null): string | null {
 
 export async function fetchHeritageByToken(
   token: string,
+  guardianTckn: string,
 ): Promise<HeritageItem[]> {
   const supabase = getSupabaseAdmin();
 
   const { data, error } = await supabase
     .from(SUPABASE_TABLES.testaments)
-    .select("id, verification_token, title, content, is_verified, guardian_tckn")
+    .select("id, verification_token, title, content, is_verified")
     .eq(TESTAMENT_COLUMNS.token, token)
+    .eq(TESTAMENT_COLUMNS.guardianTckn, guardianTckn)
+    .eq(TESTAMENT_COLUMNS.isVerified, true)
+    .eq("is_active", true)
     .returns<TestamentRow[]>();
 
   if (error) {
