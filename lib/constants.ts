@@ -1,14 +1,10 @@
 export const MAX_PDF_SIZE_BYTES = 5 * 1024 * 1024;
 export const MAX_PDF_SIZE_LABEL = "5 MB";
 
+/** Production n8n belge doğrulama webhook'u (sunucu tarafı). */
 export const N8N_WEBHOOK_URL =
-  process.env.NEXT_PUBLIC_N8N_WEBHOOK_URL ??
-  "https://n8n.senin-sunucun.com/webhook/vasy-verify";
-
-export const N8N_TEST_WEBHOOK_DISPLAY =
-  process.env.NEXT_PUBLIC_N8N_TEST_WEBHOOK_DISPLAY ??
-  process.env.N8N_TEST_WEBHOOK_URL ??
-  "https://n8n.kenankarabulut.com/webhook-test/vasy-verify";
+  process.env.N8N_WEBHOOK_URL ??
+  "https://n8n.kenankarabulut.com/webhook/vasy-verify";
 
 export const N8N_TIMEOUT_MS = 90_000;
 
