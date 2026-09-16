@@ -3,8 +3,8 @@
 import { useCallback, useState } from "react";
 import { verifyIdentity } from "@/app/actions/verify-identity";
 import { DocumentUpload } from "@/components/document-upload";
+import { DigitalLegacyExperience } from "@/components/legacy/digital-legacy-experience";
 import { IdentityForm } from "@/components/identity-form";
-import { TestamentViewer } from "@/components/testament/testament-viewer";
 import { ToastBanner, type ToastState } from "@/components/toast-banner";
 import { AuthShell } from "@/components/ui/auth-shell";
 import { EmptyState } from "@/components/ui/empty-state";
@@ -42,6 +42,7 @@ export function VerificationPortal({ token }: VerificationPortalProps) {
   const [step, setStep] = useState<Step>("identity");
   const [session, setSession] = useState<VerifiedSession | null>(null);
   const [items, setItems] = useState<HeritageItem[]>([]);
+  const [ownerName, setOwnerName] = useState<string | null>(null);
   const [isVerifyingIdentity, setIsVerifyingIdentity] = useState(false);
   const [isSubmittingDocument, setIsSubmittingDocument] = useState(false);
   const [toast, setToast] = useState<ToastState>(null);
@@ -127,11 +128,8 @@ export function VerificationPortal({ token }: VerificationPortalProps) {
       }
 
       setItems(payload.data.items);
+      setOwnerName(payload.data.ownerName);
       setStep("results");
-      setToast({
-        tone: "success",
-        message: "İçerikler görüntülemeye hazır.",
-      });
     } catch {
       setToast({ tone: "error", message: "Belge doğrulanamadı" });
       setStep("upload");
@@ -197,11 +195,7 @@ export function VerificationPortal({ token }: VerificationPortalProps) {
       ) : null}
 
       {token && step === "results" ? (
-        <div className="min-h-dvh bg-canvas">
-          <div className="mx-auto w-full max-w-[1120px] px-5 pb-12 pt-8 sm:px-8">
-            <TestamentViewer items={items} />
-          </div>
-        </div>
+        <DigitalLegacyExperience items={items} ownerName={ownerName} />
       ) : null}
     </>
   );

@@ -32,4 +32,11 @@ export const TESTAMENT_COLUMNS = {
 export const PROFILE_COLUMNS = {
   id: "id",
   tcKimlikNo: "tc_kimlik_no",
+  fullName: "full_name",
 } as const;
+
+/** Medya dosyaları için Storage bucket (Flutter yüklemesi geldiğinde). */
+export const MEDIA_STORAGE_BUCKET =
+  process.env.SUPABASE_MEDIA_BUCKET ?? "avatars";
+
+export const SIGNED_URL_EXPIRES_SEC = 60 * 60;

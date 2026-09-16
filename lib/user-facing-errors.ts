@@ -1,6 +1,6 @@
 const ERROR_MAP: Record<string, string> = {
   DOCUMENT_OWNER_MISMATCH:
-    "Yüklenen belge bu vasiyet kaydıyla eşleşmiyor.",
+    "Yüklediğiniz belge bu vasiyet kaydının sahibiyle eşleşmiyor.",
   DOCUMENT_VERIFICATION_FAILED:
     "Belge resmi sistemlerde doğrulanamadı. Lütfen geçerli bir belge ile tekrar deneyin.",
   VERIFICATION_UPDATE_FAILED:

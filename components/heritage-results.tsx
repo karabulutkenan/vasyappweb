@@ -1,5 +1,2 @@
-/**
- * @deprecated Replaced by TestamentViewer for the post-verification experience.
- * Kept only to avoid accidental import breakage during transition.
- */
-export { TestamentViewer as HeritageResults } from "@/components/testament/testament-viewer";
+/** @deprecated Use DigitalLegacyExperience */
+export { DigitalLegacyExperience as HeritageResults } from "@/components/legacy/digital-legacy-experience";

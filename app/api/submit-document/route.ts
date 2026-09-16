@@ -185,8 +185,11 @@ export async function POST(request: Request): Promise<Response> {
       );
     }
 
-    const items = await fetchHeritageByToken(token, vasiTckn);
-    return jsonResult({ ok: true, data: { items } });
+    const heritage = await fetchHeritageByToken(token, vasiTckn);
+    return jsonResult({
+      ok: true,
+      data: { items: heritage.items, ownerName: heritage.ownerName },
+    });
   } catch {
     return jsonResult(
       {
