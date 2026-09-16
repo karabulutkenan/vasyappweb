@@ -117,6 +117,39 @@ export async function POST(request: Request): Promise<Response> {
       if (!n8nResponse.ok) {
         return jsonResult({ ok: false, message: "Belge doğrulanamadı" }, 422);
       }
+
+      let n8nResult: {
+        is_valid?: unknown;
+        pdf_detected?: unknown;
+        status?: unknown;
+        tckn?: unknown;
+      };
+
+      try {
+        n8nResult = (await n8nResponse.json()) as typeof n8nResult;
+      } catch {
+        return jsonResult(
+          { ok: false, message: "DOCUMENT_VERIFICATION_FAILED" },
+          422,
+        );
+      }
+
+      const documentOwnerMatches =
+        String(n8nResult.tckn ?? "").trim() ===
+        String(vasiyetSahibiTckn).trim();
+
+      const isDocumentValid =
+        n8nResult.is_valid === true &&
+        n8nResult.pdf_detected === true &&
+        n8nResult.status === "success" &&
+        documentOwnerMatches;
+
+      if (!isDocumentValid) {
+        return jsonResult(
+          { ok: false, message: "DOCUMENT_VERIFICATION_FAILED" },
+          422,
+        );
+      }
     } catch (error) {
       const aborted = error instanceof Error && error.name === "AbortError";
       return jsonResult(
