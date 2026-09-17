@@ -1,4 +1,5 @@
 import {
+  GUARDIAN_COLUMNS,
   PROFILE_COLUMNS,
   SUPABASE_TABLES,
   TESTAMENT_COLUMNS,
@@ -39,6 +40,59 @@ export async function findMatchingVerification(
   }
 
   return (data as TestamentMatchRow | null) ?? null;
+}
+
+/**
+ * Token → vasi görünen adı (yalnızca selamlama; TCKN dönmez).
+ * Link zaten ilgili vasiye özel gönderildiği için isim gösterilebilir.
+ */
+export async function fetchGuardianDisplayNameByToken(
+  token: string,
+): Promise<string | null> {
+  const supabase = getSupabaseAdmin();
+
+  const { data: testament, error } = await supabase
+    .from(SUPABASE_TABLES.testaments)
+    .select("guardian_tckn, owner_id")
+    .eq(TESTAMENT_COLUMNS.token, token)
+    .limit(1)
+    .maybeSingle();
+
+  if (error) {
+    console.error("[fetchGuardianDisplayNameByToken]", error);
+    return null;
+  }
+
+  const row = testament as {
+    guardian_tckn?: string | null;
+    owner_id?: string | null;
+  } | null;
+
+  const tckn = row?.guardian_tckn?.trim() ?? "";
+  const ownerId = row?.owner_id?.trim() ?? "";
+  if (!tckn || !ownerId) {
+    return null;
+  }
+
+  const { data: guardian, error: guardianError } = await supabase
+    .from(SUPABASE_TABLES.guardians)
+    .select(GUARDIAN_COLUMNS.fullName)
+    .eq(GUARDIAN_COLUMNS.ownerId, ownerId)
+    .eq(GUARDIAN_COLUMNS.tcKimlikNo, tckn)
+    .maybeSingle();
+
+  if (guardianError) {
+    console.error("[fetchGuardianDisplayNameByToken:guardian]", guardianError);
+    return null;
+  }
+
+  const name = (guardian as { full_name?: string | null } | null)?.full_name;
+  if (typeof name !== "string" || !name.trim()) {
+    return null;
+  }
+
+  // Selamlamada ilk ad yeterli
+  return name.trim().split(/\s+/)[0] ?? null;
 }
 
 /**

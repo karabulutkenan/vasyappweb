@@ -82,7 +82,7 @@ export function DocumentUpload({
           setIsDragging(false);
           acceptFile(event.dataTransfer.files[0]);
         }}
-        className={`rounded-[28px] px-5 py-9 text-center transition ${
+        className={`rounded-[22px] px-4 py-7 text-center transition sm:rounded-[28px] sm:px-5 sm:py-9 ${
           isDragging
             ? "bg-header/90 ring-2 ring-primary"
             : "bg-header shadow-[0_18px_40px_rgba(52,73,94,0.28)]"
@@ -102,10 +102,10 @@ export function DocumentUpload({
           <span className="mx-auto mb-3 flex h-11 w-11 items-center justify-center rounded-full bg-white/15">
             <MaterialIcon name="badge" size={24} className="text-white" />
           </span>
-          <span className="block text-[16px] font-extrabold">
+          <span className="block text-[15px] font-extrabold sm:text-[16px]">
             Formül C / Ölüm Belgesi Yükle
           </span>
-          <span className="mt-2 block text-[13px] font-semibold leading-[1.45] text-white/85">
+          <span className="mt-2 block text-[12px] font-semibold leading-[1.45] text-white/85 sm:text-[13px]">
             Pdf dosyasını sürükleyip bırakın ya da seçmek için dokunun.
             <br />
             En fazla {MAX_PDF_SIZE_LABEL} ve yalnızca Pdf dosyası.

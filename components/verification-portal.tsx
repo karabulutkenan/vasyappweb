@@ -22,9 +22,14 @@ type VerifiedSession = {
 
 type VerificationPortalProps = {
   token: string | null;
+  /** Yalnızca 1. adım selamlaması; 2. adımda gösterilmez. */
+  guardianName: string | null;
 };
 
-export function VerificationPortal({ token }: VerificationPortalProps) {
+export function VerificationPortal({
+  token,
+  guardianName,
+}: VerificationPortalProps) {
   const [step, setStep] = useState<Step>("identity");
   const [session, setSession] = useState<VerifiedSession | null>(null);
   const [items, setItems] = useState<HeritageItem[]>([]);
@@ -124,6 +129,10 @@ export function VerificationPortal({ token }: VerificationPortalProps) {
     }
   }
 
+  const identityTitle = guardianName
+    ? `Merhaba, ${guardianName}`
+    : "Merhaba";
+
   return (
     <>
       <ToastBanner toast={toast} onDismiss={dismissToast} />
@@ -145,7 +154,7 @@ export function VerificationPortal({ token }: VerificationPortalProps) {
 
       {token && step === "identity" ? (
         <AuthShell
-          title="Merhaba"
+          title={identityTitle}
           description="Lütfen T.C. Kimlik No ve size özel oluşturulan 6 haneli kod numaranızı giriniz."
         >
           <IdentityForm

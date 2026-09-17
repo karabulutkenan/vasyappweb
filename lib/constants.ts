@@ -35,6 +35,13 @@ export const PROFILE_COLUMNS = {
   fullName: "full_name",
 } as const;
 
+export const GUARDIAN_COLUMNS = {
+  id: "id",
+  ownerId: "owner_id",
+  fullName: "full_name",
+  tcKimlikNo: "tc_kimlik_no",
+} as const;
+
 /** Medya dosyaları için Storage bucket (Flutter yüklemesi geldiğinde). */
 export const MEDIA_STORAGE_BUCKET =
   process.env.SUPABASE_MEDIA_BUCKET ?? "avatars";
