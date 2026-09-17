@@ -2,7 +2,7 @@ import type { ButtonHTMLAttributes, ReactNode } from "react";
 import { MaterialIcon } from "@/components/ui/material-icon";
 import { Spinner } from "@/components/ui/spinner";
 
-type ButtonVariant = "primary" | "outlined" | "danger" | "positive" | "text";
+type ButtonVariant = "primary" | "outlined" | "danger" | "positive" | "text" | "accent";
 
 type AppButtonProps = {
   children: ReactNode;
@@ -13,6 +13,7 @@ type AppButtonProps = {
 
 const variantClass: Record<ButtonVariant, string> = {
   primary: "min-h-14 bg-header text-white hover:bg-header-hover",
+  accent: "min-h-14 bg-primary text-header hover:brightness-[0.96]",
   outlined:
     "min-h-[52px] border-[1.5px] border-header bg-transparent text-header hover:bg-header/[0.08]",
   danger: "min-h-14 bg-logout text-white hover:brightness-[0.92]",
@@ -22,6 +23,7 @@ const variantClass: Record<ButtonVariant, string> = {
 
 const mutedClass: Record<ButtonVariant, string> = {
   primary: "bg-secondary-container text-on-secondary-container hover:bg-secondary-container",
+  accent: "bg-secondary-container text-on-secondary-container hover:bg-secondary-container",
   outlined: "border-secondary-container text-outline hover:bg-transparent",
   danger: "opacity-60 hover:brightness-100",
   positive: "opacity-60 hover:brightness-100",
@@ -39,7 +41,11 @@ export function AppButton({
 }: AppButtonProps) {
   const isDisabled = Boolean(disabled) || loading;
   const isMuted = Boolean(disabled) && !loading;
-  const isFilled = variant === "primary" || variant === "danger" || variant === "positive";
+  const isFilled =
+    variant === "primary" ||
+    variant === "danger" ||
+    variant === "positive" ||
+    variant === "accent";
 
   return (
     <button

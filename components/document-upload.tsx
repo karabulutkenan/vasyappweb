@@ -1,11 +1,10 @@
 "use client";
 
 import { FormEvent, useRef, useState } from "react";
+import { AppButton } from "@/components/ui/button";
+import { MaterialIcon } from "@/components/ui/material-icon";
 import { MAX_PDF_SIZE_BYTES, MAX_PDF_SIZE_LABEL } from "@/lib/constants";
 import { isPdfFile } from "@/lib/validation";
-import { AppButton } from "@/components/ui/button";
-import { IconWell } from "@/components/ui/icon-well";
-import { MaterialIcon } from "@/components/ui/material-icon";
 
 type DocumentUploadProps = {
   isSubmitting: boolean;
@@ -65,70 +64,67 @@ export function DocumentUpload({
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-      <div>
-        <p className="mb-2 text-[11px] font-extrabold uppercase tracking-[0.8px] text-outline">
-          Belge
-        </p>
-        <div
-          onDragEnter={(event) => {
-            event.preventDefault();
-            setIsDragging(true);
-          }}
-          onDragOver={(event) => {
-            event.preventDefault();
-            setIsDragging(true);
-          }}
-          onDragLeave={(event) => {
-            event.preventDefault();
-            setIsDragging(false);
-          }}
-          onDrop={(event) => {
-            event.preventDefault();
-            setIsDragging(false);
-            acceptFile(event.dataTransfer.files[0]);
-          }}
-          className={`rounded-card-md bg-field px-5 py-8 text-center ring-1 transition-colors ${
-            isDragging
-              ? "bg-primary-container ring-primary"
-              : "ring-secondary-container"
-          }`}
-        >
-          <input
-            ref={inputRef}
-            id="pdf-upload"
-            type="file"
-            name="file"
-            accept="application/pdf,.pdf"
-            className="sr-only"
-            disabled={isSubmitting}
-            onChange={(event) => acceptFile(event.target.files?.[0])}
-          />
-          <label htmlFor="pdf-upload" className="block cursor-pointer">
-            <span className="mx-auto mb-4 flex justify-center">
-              <IconWell>
-                <MaterialIcon name="picture_as_pdf" size={22} />
-              </IconWell>
-            </span>
-            <span className="block text-[15px] font-extrabold text-header">
-              Formül C / Ölüm Belgesi Yükle
-            </span>
-            <span className="mt-2 block text-[12px] font-semibold leading-[1.4] text-outline">
-              PDF dosyasını sürükleyip bırakın veya seçmek için dokunun.
-              <br />
-              En fazla {MAX_PDF_SIZE_LABEL}, yalnızca PDF.
-            </span>
-          </label>
-        </div>
+      <div
+        onDragEnter={(event) => {
+          event.preventDefault();
+          setIsDragging(true);
+        }}
+        onDragOver={(event) => {
+          event.preventDefault();
+          setIsDragging(true);
+        }}
+        onDragLeave={(event) => {
+          event.preventDefault();
+          setIsDragging(false);
+        }}
+        onDrop={(event) => {
+          event.preventDefault();
+          setIsDragging(false);
+          acceptFile(event.dataTransfer.files[0]);
+        }}
+        className={`rounded-[28px] px-5 py-9 text-center transition ${
+          isDragging
+            ? "bg-header/90 ring-2 ring-primary"
+            : "bg-header shadow-[0_18px_40px_rgba(52,73,94,0.28)]"
+        }`}
+      >
+        <input
+          ref={inputRef}
+          id="pdf-upload"
+          type="file"
+          name="file"
+          accept="application/pdf,.pdf"
+          className="sr-only"
+          disabled={isSubmitting}
+          onChange={(event) => acceptFile(event.target.files?.[0])}
+        />
+        <label htmlFor="pdf-upload" className="block cursor-pointer text-white">
+          <span className="mx-auto mb-3 flex h-11 w-11 items-center justify-center rounded-full bg-white/15">
+            <MaterialIcon name="badge" size={24} className="text-white" />
+          </span>
+          <span className="block text-[16px] font-extrabold">
+            Formül C / Ölüm Belgesi Yükle
+          </span>
+          <span className="mt-2 block text-[13px] font-semibold leading-[1.45] text-white/85">
+            Pdf dosyasını sürükleyip bırakın ya da seçmek için dokunun.
+            <br />
+            En fazla {MAX_PDF_SIZE_LABEL} ve yalnızca Pdf dosyası.
+          </span>
+        </label>
       </div>
 
       {file ? (
-        <div className="flex items-center gap-3 rounded-card-sm bg-approved px-3.5 py-3">
-          <IconWell className="bg-heart/15 text-heart">
+        <div className="flex items-center gap-3 rounded-[22px] border border-white/55 bg-white/70 px-3.5 py-3 backdrop-blur-md">
+          <span className="flex h-10 w-10 items-center justify-center rounded-full bg-heart/15 text-heart">
             <MaterialIcon name="check_circle" filled size={22} />
-          </IconWell>
+          </span>
           <div className="min-w-0 flex-1">
-            <p className="truncate text-[15px] font-extrabold text-header">{file.name}</p>
-            <p className="text-[12px] font-semibold text-outline">{formatSize(file.size)}</p>
+            <p className="truncate text-[15px] font-extrabold text-header">
+              {file.name}
+            </p>
+            <p className="text-[12px] font-semibold text-outline">
+              {formatSize(file.size)}
+            </p>
           </div>
           <button
             type="button"
@@ -145,16 +141,14 @@ export function DocumentUpload({
         </div>
       ) : null}
 
-      <div className="pt-1">
-        <AppButton
-          type="submit"
-          icon="send"
-          loading={isSubmitting}
-          disabled={isSubmitting || !file}
-        >
-          {isSubmitting ? "GÖNDERİLİYOR" : "SİSTEME GÖNDER!"}
-        </AppButton>
-      </div>
+      <AppButton
+        type="submit"
+        variant="accent"
+        loading={isSubmitting}
+        disabled={isSubmitting || !file}
+      >
+        {isSubmitting ? "GÖNDERİLİYOR" : "SİSTEME GÖNDER"}
+      </AppButton>
     </form>
   );
 }

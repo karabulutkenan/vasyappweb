@@ -6,6 +6,8 @@ type PillFieldProps = {
   error?: boolean;
   trailing?: ReactNode;
   label?: string;
+  /** Cam / frosted input — giriş ekranı için */
+  glass?: boolean;
 } & Omit<InputHTMLAttributes<HTMLInputElement>, "className">;
 
 /**
@@ -18,6 +20,7 @@ export function PillField({
   error = false,
   trailing,
   label,
+  glass = false,
   id,
   ...props
 }: PillFieldProps) {
@@ -33,9 +36,17 @@ export function PillField({
       ) : null}
       <div
         className={`flex min-h-14 w-full items-center rounded-pill px-5 py-[18px] ${
-          error ? "ring-2 ring-error" : "ring-1 ring-secondary-container"
+          glass
+            ? "border border-white/60 bg-white/70 shadow-[0_10px_30px_rgba(52,73,94,0.08)] backdrop-blur-md"
+            : ""
+        } ${
+          error
+            ? "ring-2 ring-error"
+            : glass
+              ? ""
+              : "ring-1 ring-secondary-container"
         }`}
-        style={{ backgroundColor: "var(--canvas)" }}
+        style={glass ? undefined : { backgroundColor: "var(--canvas)" }}
       >
         <MaterialIcon name={icon} size={26} className="shrink-0 text-header" />
         <span

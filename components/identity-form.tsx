@@ -8,10 +8,17 @@ import { PillField } from "@/components/ui/pill-field";
 type IdentityFormProps = {
   token: string;
   isSubmitting: boolean;
-  onSubmit: (values: { vasiTckn: string; verificationCode: string }) => Promise<void>;
+  onSubmit: (values: {
+    vasiTckn: string;
+    verificationCode: string;
+  }) => Promise<void>;
 };
 
-export function IdentityForm({ token, isSubmitting, onSubmit }: IdentityFormProps) {
+export function IdentityForm({
+  token,
+  isSubmitting,
+  onSubmit,
+}: IdentityFormProps) {
   const [vasiTckn, setVasiTckn] = useState("");
   const [verificationCode, setVerificationCode] = useState("");
   const [localError, setLocalError] = useState<string | null>(null);
@@ -34,13 +41,12 @@ export function IdentityForm({ token, isSubmitting, onSubmit }: IdentityFormProp
   }
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-4" noValidate>
+    <form onSubmit={handleSubmit} className="flex flex-col gap-3.5" noValidate>
       <input type="hidden" name="token" value={token} />
 
       <PillField
         id="vasi-tckn"
         icon="badge"
-        label="Vasi T.C. Kimlik No"
         name="vasiTckn"
         inputMode="numeric"
         autoComplete="off"
@@ -49,7 +55,8 @@ export function IdentityForm({ token, isSubmitting, onSubmit }: IdentityFormProp
         disabled={isSubmitting}
         aria-invalid={localError?.includes("Vasi T.C.") ? true : undefined}
         error={Boolean(localError?.includes("Vasi T.C."))}
-        placeholder="11 haneli kimlik numarası"
+        placeholder="11 Haneli T.C. Kimlik Numaranızı Giriniz"
+        glass
         onChange={(event) => {
           setVasiTckn(event.target.value.replace(/\D/g, "").slice(0, 11));
           setLocalError(null);
@@ -59,14 +66,14 @@ export function IdentityForm({ token, isSubmitting, onSubmit }: IdentityFormProp
       <PillField
         id="verification-code"
         icon="vpn_key"
-        label="Doğrulama Kodu"
         name="verificationCode"
         autoComplete="one-time-code"
         maxLength={16}
         value={verificationCode}
         disabled={isSubmitting}
         error={Boolean(localError && !localError.includes("Vasi T.C."))}
-        placeholder="Size özel üretilen kod"
+        placeholder="Size Özel 6 Haneli Onay Kodunuzu Giriniz"
+        glass
         onChange={(event) => {
           setVerificationCode(event.target.value.replace(/[^A-Za-z0-9]/g, ""));
           setLocalError(null);
@@ -75,7 +82,7 @@ export function IdentityForm({ token, isSubmitting, onSubmit }: IdentityFormProp
 
       {localError ? (
         <p
-          className="flex items-start gap-2 rounded-card-sm bg-[#FDECEC] px-3.5 py-3 text-[14px] font-bold leading-[1.35] text-error-text"
+          className="flex items-start gap-2 rounded-[18px] border border-white/50 bg-white/70 px-3.5 py-3 text-[14px] font-bold leading-[1.35] text-error-text backdrop-blur-md"
           role="alert"
         >
           <MaterialIcon name="error" filled size={18} className="mt-0.5 shrink-0" />
@@ -83,13 +90,12 @@ export function IdentityForm({ token, isSubmitting, onSubmit }: IdentityFormProp
         </p>
       ) : null}
 
-      <div className="pt-2">
+      <div className="pt-1">
         <AppButton type="submit" loading={isSubmitting} disabled={isSubmitting}>
-          {isSubmitting ? "DOĞRULANIYOR" : "DOĞRULA!"}
+          {isSubmitting ? "DOĞRULANIYOR" : "DOĞRULA !"}
         </AppButton>
 
-        <p className="mt-4 flex items-center justify-center gap-1.5 text-center text-[12px] font-semibold leading-[1.4] text-header/75">
-          <MaterialIcon name="verified_user" size={16} className="text-header" />
+        <p className="mt-4 text-center text-[12px] font-semibold leading-[1.4] text-header/70">
           Bilgileriniz yalnızca doğrulama amacıyla işlenir.
         </p>
       </div>

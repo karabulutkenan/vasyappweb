@@ -8,14 +8,9 @@ import { IdentityForm } from "@/components/identity-form";
 import { ToastBanner, type ToastState } from "@/components/toast-banner";
 import { AuthShell } from "@/components/ui/auth-shell";
 import { EmptyState } from "@/components/ui/empty-state";
-import { FilterChip } from "@/components/ui/filter-chip";
-import { MaterialIcon } from "@/components/ui/material-icon";
-import { PageSheet } from "@/components/ui/page-sheet";
-import { ProofOfLifeCard } from "@/components/ui/proof-of-life-card";
 import { VerifyingOverlay } from "@/components/verifying-overlay";
 import type { DocumentSubmitResult, HeritageItem } from "@/lib/types";
 import { toUserFacingMessage } from "@/lib/user-facing-errors";
-import { maskTckn } from "@/lib/validation";
 
 type Step = "identity" | "upload" | "results";
 
@@ -28,15 +23,6 @@ type VerifiedSession = {
 type VerificationPortalProps = {
   token: string | null;
 };
-
-function StepChips({ current }: { current: Exclude<Step, "results"> }) {
-  return (
-    <div className="mb-4 flex flex-wrap gap-2">
-      <FilterChip selected={current === "identity"}>Vasi</FilterChip>
-      <FilterChip selected={current === "upload"}>Belge</FilterChip>
-    </div>
-  );
-}
 
 export function VerificationPortal({ token }: VerificationPortalProps) {
   const [step, setStep] = useState<Step>("identity");
@@ -144,20 +130,23 @@ export function VerificationPortal({ token }: VerificationPortalProps) {
       {isSubmittingDocument ? <VerifyingOverlay /> : null}
 
       {!token ? (
-        <AuthShell eyebrow="GEÇERSİZ BAĞLANTI">
+        <AuthShell
+          title="Bu sayfa açılamadı"
+          description="Doğrulama yalnızca VASY uygulamasından iletilen bağlantı ile yapılabilir. Lütfen uygulamadaki bağlantıyı kullanın."
+        >
           <EmptyState
             align="start"
             icon="link_off"
-            title="Bu sayfa açılamadı"
-            description="Doğrulama yalnızca VASY uygulamasından iletilen bağlantı ile yapılabilir. Lütfen uygulamadaki bağlantıyı kullanın."
+            title="Geçersiz bağlantı"
+            description="Lütfen uygulamadaki doğrulama bağlantısını kullanın."
           />
         </AuthShell>
       ) : null}
 
       {token && step === "identity" ? (
         <AuthShell
-          eyebrow="HOŞ GELDİNİZ"
-          description="Vasi T.C. kimlik numaranız ve size özel doğrulama kodu ile devam edin."
+          title="Merhaba"
+          description="Lütfen T.C. Kimlik No ve size özel oluşturulan 6 haneli kod numaranızı giriniz."
         >
           <IdentityForm
             token={token}
@@ -168,22 +157,11 @@ export function VerificationPortal({ token }: VerificationPortalProps) {
       ) : null}
 
       {token && step === "upload" ? (
-        <PageSheet title="Belge yükleme">
-          <StepChips current="upload" />
-          <ProofOfLifeCard
-            tone="healthy"
-            title="Vasi doğrulandı"
-            trailing={
-              <span className="flex items-center gap-1 text-[12px] font-bold tracking-[0.08em] text-header">
-                {maskTckn(session?.vasiTckn ?? "")}
-                <MaterialIcon name="verified" filled size={18} className="text-heart" />
-              </span>
-            }
-          />
-          <p className="mb-4 mt-4 text-[14px] font-semibold leading-[1.4] text-outline">
-            Formül C / ölüm belgesini PDF olarak yükleyin. Vasiyet sahibi kimliği
-            sistem tarafından bağlantıdan doğrulanır.
-          </p>
+        <AuthShell
+          eyebrow="SADECE BİR ADIM KALDI"
+          title="Vasiliğiniz doğrulanmıştır!"
+          description="Bu bölümde E-Devletten edineceğiniz ölüm belgesini sisteme yüklemeniz gerekmektedir."
+        >
           <DocumentUpload
             isSubmitting={isSubmittingDocument}
             onSubmit={handleDocumentSubmit}
@@ -191,7 +169,7 @@ export function VerificationPortal({ token }: VerificationPortalProps) {
               setToast({ tone: "error", message: toUserFacingMessage(message) })
             }
           />
-        </PageSheet>
+        </AuthShell>
       ) : null}
 
       {token && step === "results" ? (
